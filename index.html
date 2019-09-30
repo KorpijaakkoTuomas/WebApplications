@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<!--Tehtävä tehty erään demovideon opastuksella (youtube) -->
+
+<head>
+	<title>5x5 Tic-Tac-toe</title> <!--Tämä näkyy sivun tabissa nimenä -->
+
+	<style>
+		.Nelio {
+			width: 50px;
+			height: 50px;
+			text-align: center;
+			font-size: 30pt;
+			font-family: Helvetica;
+		}
+
+	</style>
+
+	<script> 
+
+		function aloitus() {
+			// Ruudukko tyhjennetään aina pelin alussa
+			for (let i = 1; i <= 25; i++) {
+				tyhjennys(i);
+			}
+		
+			document.vuoro = "X";		// määritetään aloittajaksi X
+			document.voittaja = null;		// alustetaan voittaja tyhjäksi
+		
+			infoViesti("Pelaaja 1 aloittaa. Merkki: " + document.vuoro);
+			//viesti tulee näkyviin ruudukon yläpuolelle
+		}
+	
+		function infoViesti(viesti) {
+			document.getElementById("teksti").innerText = viesti;
+		}		// viesti parametri aluksi: (document.vuoro + " aloittaa")
+
+		function seuraavaSiirto(nelio) {
+			if (document.voittaja != null) { //tarkastetaan onko voittajaa
+				infoViesti(document.voittaja + " voitti! Peli loppui.");
+			} else if (nelio.innerText == "") {
+				nelio.innerText = document.vuoro;
+				vuoronVaihto();
+			} else {
+				infoViesti(document.vuoro + ": Valitse toinen ruutu.");
+			}
+		}
+
+		function vuoronVaihto() { //vaihtaa vuoron
+			//jos voitonTarkistus palauttaa true saadaan voittaja
+			if (voitonTarkistus(document.vuoro)) { //käydään läpi joka vuoron vaihdossa
+				infoViesti(document.vuoro + " voitti.");
+				alert(document.vuoro + " voitti!");
+				document.voittaja = document.vuoro; //jos voittaja selvillä
+			} else if (document.vuoro == "X") {		//jos ei vielä voittajaa jatketaan
+				document.vuoro = "O";				
+				infoViesti("Seuraava siirto. Pelaaja 2: " + document.vuoro);
+			} else {
+				document.vuoro = "X";
+				infoViesti("Seuraava siirto. Pelaaja 1: " + document.vuoro);
+			}
+			
+		}
+
+		function voitonTarkistus(merkki) {
+			var tulos = false; // Kaikki tavat voittaa 5x5 ristinolla
+			if (rivinTarkistus(1, 2, 3, 4, 5, merkki) ||
+					rivinTarkistus(6, 7, 8, 9, 10, merkki) ||
+					rivinTarkistus(11, 12, 13, 14, 15, merkki) ||
+					rivinTarkistus(16, 17, 18, 19, 20, merkki) ||
+					rivinTarkistus(21, 22, 23, 24, 25, merkki) ||
+
+					rivinTarkistus(1, 6, 11, 16, 21, merkki) ||
+					rivinTarkistus(2, 7, 12, 17, 22, merkki) ||
+					rivinTarkistus(3, 8, 13, 18, 23, merkki) ||
+					rivinTarkistus(4, 9, 14, 19, 24, merkki) ||
+					rivinTarkistus(5, 10, 15, 20, 25, merkki) ||
+
+					rivinTarkistus(1, 7, 13, 19, 25, merkki) ||
+					rivinTarkistus(5, 9, 13, 17, 21, merkki)) {
+					// palautetaan true jos jokin rivi toteutuu (funkiosta palautuu 'true')
+					tulos = true;
+				}
+
+			return tulos;	
+		}
+
+		function rivinTarkistus(m1, m2, m3, m4, m5, merkki) {
+			var tulos = false;
+			if (nelioId(m1) == merkki && 
+					nelioId(m2) == merkki && 
+					nelioId(m3) == merkki && 
+					nelioId(m4) == merkki &&
+					nelioId(m5) == merkki) {
+				tulos = true;
+			}		//palautetaan true jos kaikki kohdat täsmäävät
+			return tulos;
+		}
+
+		function nelioId(numero) {
+			return document.getElementById("n" + numero).innerText;
+		}		//haetaan nelion sisältö kyseessä olevan neliön id tagilla
+
+		function tyhjennys(numero) {
+			document.getElementById("n" + numero).innerText = "";
+		}		//asetetaan id tagia vastaavan neliön sisällöksi 'tyhjä'
+
+	</script>
+
+</head>
+
+<body onload="aloitus();"> <!-- peli alkaa sivun latauksessa-->
+
+<h2>5x5 Tic-Tac-toe</h2>
+
+<div id="teksti"></div> <!-- muuttuva viestikenttä (infoViesti())-->
+
+<table border="1"> <!-- Ohjeena oli renderöidä ruudukko 
+												javascriptillä, tämä ei taida olla niin -->
+	<tr>
+		<td id="n1" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n2" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n3" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n4" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n5" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+	</tr> <!-- id tagi jolla käytetään mm tarkastuksessa-->
+	<tr> <!-- class neliolla määritetään jokaisesta ruudusta samanlainen-->
+		<td id="n6" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n7" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n8" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n9" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n10" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+	</tr> <!-- "onclick="function(this);"--> 
+	<tr>
+		<td id="n11" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n12" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n13" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n14" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n15" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+	</tr>
+	<tr>
+		<td id="n16" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n17" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n18" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n19" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n20" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+	</tr>
+	<tr>
+		<td id="n21" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n22" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n23" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n24" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+		<td id="n25" class="Nelio" onclick="seuraavaSiirto(this);"></td>
+	</tr>
+
+</table>
+
+<a href="javascript:aloitus();">Aloita alusta</a>
+			<!-- href + javascript tekee linkin, jolla pelin saa aloitettua
+						uudestaan päivittämättä sivua-->
+</body>
+
+</html>
